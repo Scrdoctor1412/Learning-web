@@ -1,14 +1,14 @@
 //Promise
 const fakeRequest = (url) => {
-    return new Promise((resolve,reject) => {
-        const delay = Math.floor(Math.random() * 4500 ) + 500
+    return new Promise((resolve, reject) => {
+        const delay = Math.floor(Math.random() * 4500) + 500
         setTimeout(() => {
-            if(delay > 4000){
+            if (delay > 4000) {
                 reject("too bad connection timeout :'( ")
-            }else{
+            } else {
                 resolve(`Here is your fake data from ${url}`)
             }
-        },delay)
+        }, delay)
     })
 }
 
@@ -46,18 +46,50 @@ const fakeRequest = (url) => {
 
 //third demo
 
-const delayedColor = (color,delay) => {
-    return new Promise((resolve,reject) => {
+const delayedColor = (color, delay) => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
-            document.body.style.backgroundColor = color;
-            resolve()
-        },delay)
+            if(delay>=1000){
+                document.body.style.backgroundColor = color;
+                resolve('success')
+            }else{
+                reject('connection timeout sorry :(')
+            }
+        }, delay)
     })
 }
 const delay = 1000
-delayedColor('lightblue',delay)
-    .then(() => delayedColor('red',delay))           //implicit return
-    .then(() => delayedColor('yellow',delay))
-    .then(() => delayedColor('pink',delay))
-    .then(() => delayedColor('indigo',delay))
-    .then(() => delayedColor('violet',delay))
+// delayedColor('lightblue',delay)
+//     .then(() => delayedColor('red',delay))           //implicit return
+//     .then(() => delayedColor('yellow',delay))
+//     .then(() => delayedColor('pink',delay))
+//     .then(() => delayedColor('indigo',delay))
+//     .then(() => delayedColor('violet',delay))
+
+const rainbow = async () => {
+    await delayedColor('red', delay)
+    await delayedColor('orange', delay)
+    await delayedColor('yellow', delay)
+    await delayedColor('green', delay)
+    await delayedColor('blue', delay)
+    await delayedColor('indigo', delay)
+    await delayedColor('violet', delay)
+}
+
+async function printRainbow(){
+    let res = await rainbow()
+    console.log('oke')
+}
+
+async function makeTwoRequest(){
+    try{
+        let data1 = await fakeRequest('\page1')
+        console.log(data1)
+        let data2 = await fakeRequest('\page2')
+        console.log(data2)
+    }catch (e) {
+        console.log(`Catch an error: ${e}`)
+    }
+}
+
+makeTwoRequest()
